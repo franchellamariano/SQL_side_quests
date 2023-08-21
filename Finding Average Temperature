@@ -1,0 +1,49 @@
+# Finding the Average Temperature for aa Meteorologist
+
+SELECT stn, date,
+  IF (
+    temp = 999.9,
+    NULL,
+    temp) AS temperature, -- replaced 999.9 values with NULL for missing temperature
+    IF (
+    wdsp = "999.9",
+    NULL,
+    CAST(wdsp AS Float64)) AS wind_speed -- replaced 999.9 values with NULL for missing wind speed
+    IF (
+      prcp = 99.99, 0
+      prcp) AS precipitation
+      FROM 'bigquery-public-data.noaa_gsod.gsod2020'
+      WHERE stn = "725030" -- La Guardia
+      OR stn = "744860" -- JFK
+      ORDER BY date DESC, stn ASC
+      
+-- Composed a temporary new table to find the avergae temperature in June 2020 for stations La Guardia and JFK 
+
+SELECT AVG(temperature)
+FROM 'airy-shuttle-315515.demos.nyc_weather'
+WHERE date BETWEEN '2020-06-01' AND '2020-06-30'
+-- avg temp: 72.883
+
+SELECT stn, date,
+  IF (
+    temp = 999.9,
+    NULL,
+    temp) AS temperature, -- replaced 999.9 values with NULL for missing temperature
+    IF (
+    wdsp = "999.9",
+    NULL,
+    CAST(wdsp AS Float64)) AS wind_speed -- replaced 999.9 values with NULL for missing wind speed
+    IF (
+      prcp = 99.99, 0
+      prcp) AS precipitation
+      FROM 'bigquery-public-data.noaa_gsod.gsod2020'
+      WHERE stn = "725030" -- La Guardia
+      OR stn = "744860" -- JFK
+      ORDER BY date DESC, stn ASC
+      
+-- Composed a temporary new table to find the avergae temperature in June 2020 for stations La Guardia and JFK 
+
+SELECT AVG(temperature)
+FROM 'airy-shuttle-315515.demos.nyc_weather'
+WHERE date BETWEEN '2020-06-01' AND '2020-06-30'
+-- avg temp: 72.883
