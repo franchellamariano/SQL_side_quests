@@ -1,0 +1,327 @@
+#Cyclistic Capstone Project
+
+-- I will be finding differences between 
+## Cleaning the data
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, CAST(end_station_id AS STRING) AS end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+FROM `cyclists.june_2022`;
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, start_station_id, end_station_name, CAST(end_station_id AS STRING) AS end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+FROM `cyclists.sept_2022`;
+SELECT ride_id, rideable_type, started_at, ended_at, start_station_name, CAST(start_station_id AS STRING) AS start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, member_casual
+FROM `cyclists.april_2023`;
+
+## Organizing the data
+CREATE TABLE cyclists.cyclistic_year AS
+SELECT *
+FROM `cyclists.may_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.june_2022_revised`
+UNION ALL
+SELECT *
+FROM `cyclists.july_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.august_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.sept_2022_revised`
+UNION ALL
+SELECT *
+FROM `cyclists.oct_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.nov_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.dec_2022`
+UNION ALL
+SELECT *
+FROM `cyclists.jan_2023`
+UNION ALL
+SELECT *
+FROM `cyclists.feb_2023`
+UNION ALL
+SELECT *
+FROM `cyclists.march_2023`
+UNION ALL
+SELECT *
+FROM `cyclists.april_2023_revised`;
+
+## Finding information from the data
+SELECT *
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year`
+ORDER BY started_at;
+SELECT ride_id, rideable_type, start_station_name, start_station_id, end_station_name, end_station_id, start_lat, start_lng, end_lat, end_lng, started_at, ended_at, member_casual, ended_at - started_at AS ride_length
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.ride_length`;
+-- avg yearly ride length is 0-0 0 -0:13:26.254569190
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.may_2022`;
+
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.may2022_ride_length`;
+-- avg may ride length is 0-0 0 -0:17:19.015665796
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.may_2022`
+WHERE member_casual = "member";
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.may2022_member_rl`
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.june_2022_revised`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.july_2022`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.august_2022`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.sept_2022_revised`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.oct_2022`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.nov_2022`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.dec_2022`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.jan_2023`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.feb_2023`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.march_2023`
+WHERE member_casual = "member";
+
+SELECT member_casual, started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.april_2023_revised`
+WHERE member_casual = "member";
+
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.may2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.june2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.july2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.august2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.sept2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.oct2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.nov2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.dec2022_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.jan2023_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.feb2023_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.mar2023_member_rl`
+UNION ALL
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.apr_member_rl`
+
+## Finding between members and casual riders in each month throughout the years
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.may2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.june2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.july2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.august2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.sept2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.oct2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.nov2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.dec2022_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.jan2023_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.feb2023_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.mar2023_member_rl`
+GROUP BY ride_month
+UNION ALL
+SELECT EXTRACT(MONTH FROM started_at) AS ride_month, AVG(ride_length) AS avg_ride_length
+FROM `cyclists.apr_member_rl`
+GROUP BY ride_month
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.june_2022_revised`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.june2022_ride_length`;
+-- avg june 2022 ride length is 0-0 0 -0:15:30.592689295
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.july_2022`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.july2022_ride_length`;
+-- avg july 2022 ride length is 0-0 0 -0:16:53.929503916
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.august_2022`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.aug2022_ride_length`;
+-- avg aug 2022 ride length is 0-0 0 -0:14:25.295039164
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.sept_2022_revised`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.sept2022_ride_length`;
+-- avg sept 2022 ride length is 0-0 0 -0:12:46.151436031
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.oct_2022`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.oct2022_ride_length`;
+-- avg oct 2022 ride length is 0-0 0 -0:14:1.357702349
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.nov_2022`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.nov2022_ride_length`;
+-- avg nov 2022 ride length is 0-0 0 -0:14:59.751958224
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.dec_2022`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.dec2022_ride_length`;
+-- avg dec 2022 ride length is 0-0 0 -0:11:33.710182767
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.jan_2023`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.jan2023_ride_length`;
+-- avg jan 2023 ride length is 0-0 0 -0:11:38.125326370
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.feb_2023`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.feb2023_ride_length`;
+-- avg feb 2023 ride length is 0-0 0 -0:12:29.966057441
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.march_2023`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.march2023_ride_length`;
+-- avg march 2023 ride length is 0-0 0 -0:11:15.190600522
+
+SELECT started_at, ended_at, started_at - ended_at AS ride_length
+FROM `cyclists.april_2023_revised`;
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.april2023_ride_length`;
+-- avg april 2023 ride length is 0-0 0 -0:8:21.968668407
+
+SELECT member_casual,started_at, ended_at, ended_at - started_at AS ride_length
+FROM `cyclists.cyclistic_year`
+ORDER BY member_casual, ride_length DESC;
+
+SELECT member_casual, ride_length
+FROM `cyclists.member_casual_ride_length`
+WHERE member_casual = "member"
+SELECT MIN(ride_length) AS min_ride_length, MAX(ride_length) AS max_ride_length
+FROM `cyclists.member_ride_length`
+-- yearly min ride length for members is 0-0 0 0:0:2 and max ride length for members is 0-0 0 2:44:52
+
+SELECT member_casual, ride_length
+FROM `cyclists.member_casual_ride_length`
+WHERE member_casual = "casual"
+SELECT MIN(ride_length) AS min_ride_length, MAX(ride_length) AS max_ride_length
+FROM `cyclists.casual_ride_length`
+-- yearly min ride length for casuals is 0-0 0 0:0:2 and max ride length for casuals is 0-0 0 4:20:44
+
+SELECT member_casual
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year`
+WHERE member_casual = "member"
+-- total members is 2687
+
+SELECT member_casual
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year`
+WHERE member_casual = "casual"
+-- total casuals is 1909
+
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.member_ride_length`
+-- avg yearly ride length for members is 0-0 0 0:11:9.352437662
+
+SELECT AVG(ride_length) AS avg_ride_length
+FROM `cyclists.casual_ride_length`
+-- avg yearly ride length for members is 0-0 0 0:16:38.950235725
+
+SELECT member_casual,rideable_type
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year_full_data`
+WHERE member_casual = "member"
+AnD rideable_type = "classic_bike"
+-- total number of members who rode a classic bike = 1280
+
+SELECT member_casual,rideable_type
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year_full_data`
+WHERE member_casual = "member"
+AND rideable_type = "electric_bike"
+-- total number of members who rode an electric bike = 1407
+
+SELECT member_casual,rideable_type
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year_full_data`
+WHERE member_casual = "casual"
+AnD rideable_type = "classic_bike"
+-- total number of casuals who rode a classic bike = 297
+
+SELECT member_casual,rideable_type
+FROM `cyclist-case-study-391920.cyclists.cyclistic_year_full_data`
+WHERE member_casual = "casual"
+AnD rideable_type = "electric_bike"
+-- total number of casuals who rode an electric bike = 1511
+
