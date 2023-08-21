@@ -1,0 +1,13 @@
+# We want to find out which Citibike routes are most common for different user types (one-time paying customers and subscribers) in New York
+
+SELECT usertype,
+  CONCAT(start_station_name, "to", end_station_name) AS route, -- to find the routes
+  COUNT(*) AS num_trips,
+  ROUND(AVG(CAST(tripduration AS int64)/60),2) AS duration
+FROM
+`bigquery-public-data.new_york.citibike_trips`
+GROUP BY start_station_name, end_station_name, usertype
+ORDER BY num_trips DESC -- to find the most common trips
+LIMIT 10
+
+-- RESULTS: The 3 most common routes for customers are Central Park S & 6 AvetoCentral Park S & 6 Ave, Grand Army Plaza & Central Park StoGrand Army Plaza & Central Park S, and Centre St & Chambers SttoCentre St & Chambers St. The 3 most common routes for subscribers are W 21 St & 6 Aveto9 Ave & W 22 St, W 21 St & 6 AvetoW 22 St & 10 Ave, and E 7 St & Avenue AtoLafayette St & E 8 St.
